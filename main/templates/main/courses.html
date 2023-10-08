@@ -1,0 +1,27 @@
+{% extends 'main.html' %} {% block content %}
+
+
+<div class="heading-courses">
+    <p>All Courses</p>
+</div>
+<div class="courses">
+  {% for course in courses %}
+  <a href="{% url 'topic' course.name %}" class="tex-dec-none">
+    <div class="card">
+      <div class="card-image">
+        <img src="{{ course.thumbnail.url }}" alt="" />
+      </div>
+      <div class="topic-details">
+        <div class="heading">
+          <p>{{course.name}}</p>
+        </div>
+        <div class="discrption">
+          <p>{{course.description|truncatechars:65}}</p>
+        </div>
+      </div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+
+{% endblock %}

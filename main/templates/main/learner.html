@@ -1,0 +1,95 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load embed_video_tags %}
+{% block content %}
+<div class=" learner">
+    <div class="video-play">
+        <div class="iframe-container">{% video tut.tutorial_Video 'small' %}</div>
+        <h1>{{ tut.topic_name }}</h1>
+        
+        <div class="video-change">
+            {% if back %}
+            <div class="back-video videoplay">
+                <a href="{% url 'lecture' main back.topic_name %}" class="tex-dec-none">
+                    <p class="fs-5">Back</p>
+                </a>
+            </div>
+            {% endif %}
+            {% if next %}
+            <div class="next-video videoplay">
+                <a href="{% url 'lecture' main next.topic_name %}" class="tex-dec-none">
+                    <p class="fs-5">Next</p>
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% comment %} <div class="sidebar">
+        {% for topic in subTopic %}
+        <div class="dash">
+            <div class="log-time">
+                <img src="/images/play.png" width="40px" alt="missing" />
+                <p>{{topic.time}}</p>
+            </div>
+            <div class="sidebar-tag">
+                <a href="{% url 'lecture' topic.main topic.topic_name %}" class="tex-dec-none">
+                    <p>{{topic.topic_name}} <div style="color :green;margin-top: -18px;">{{topic.extra_details}}</div></p>
+                </a>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div> {% endcomment %}
+    <div class="flex-column sidebar">
+      {% for topic in sub_topic %}
+      <div class="dash">
+        <div class="details" onclick="myfun('{{topic.0.topic_name }}')">
+  
+          <p>{{topic.0.topic_name }}</p>
+        </div>
+  
+        {% for sub_topics in topic.1 %}
+        <div class="{{topic.0.topic_name}}  change">
+          <a href="{% url 'lecture' main sub_topics.topic_name %}">
+            <div class="topics-learner ">
+              <img src="/images/play.png" width="40px" height = "40px" alt="missing" />
+              <p>
+                {{sub_topics.topic_name}}
+              </p>
+            </div>
+          </a>
+        </div>
+  
+        {% endfor %}
+  
+  
+      </div>
+      {% endfor %}
+
+
+</div>
+
+
+
+<script>
+    function myfun(link) {
+      var dam = document.getElementsByClassName(link)
+      console.log("{{topic.0.topic_name}}")
+      var change = dam[0].style.display
+      if (change == "block") {
+        change = "none"
+      }
+      else {
+        change = "block"
+      }
+  
+      for (var i = 0; i < dam.length; i++) {
+        dam[i].style.display = change;
+  
+      }
+    }
+  
+  </script>
+  
+
+{% endblock %}
