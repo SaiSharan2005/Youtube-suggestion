@@ -2,76 +2,65 @@
 {% load static %}
 {% load embed_video_tags %}
 {% block content %}
-<div class=" learner">
-    <div class="video-play">
-        <div class="iframe-container">{% video tut.tutorial_Video 'small' %}</div>
-        <h1>{{ tut.topic_name }}</h1>
-        
-        <div class="video-change">
-            {% if back %}
-            <div class="back-video videoplay">
-                <a href="{% url 'lecture' main back.topic_name %}" class="tex-dec-none">
-                    <p class="fs-5">Back</p>
-                </a>
-            </div>
-            {% endif %}
-            {% if next %}
-            <div class="next-video videoplay">
-                <a href="{% url 'lecture' main next.topic_name %}" class="tex-dec-none">
-                    <p class="fs-5">Next</p>
-                </a>
-            </div>
-            {% endif %}
-        </div>
-    </div>
-    {% comment %} <div class="sidebar">
-        {% for topic in subTopic %}
-        <div class="dash">
-            <div class="log-time">
-                <img src="/images/play.png" width="40px" alt="missing" />
-                <p>{{topic.time}}</p>
-            </div>
-            <div class="sidebar-tag">
-                <a href="{% url 'lecture' topic.main topic.topic_name %}" class="tex-dec-none">
-                    <p>{{topic.topic_name}} <div style="color :green;margin-top: -18px;">{{topic.extra_details}}</div></p>
-                </a>
-            </div>
+<div class="learner learn-main">
+  <div class="side-bar">
+    {% for topic in sub_topic %}
+    <div class="dash">
+      <div class="details" onclick="myfun('{{ topic.0.topic_name }}')">
+        <p>{{ topic.0.topic_name }}</p>
+      </div>
 
-        </div>
-        {% endfor %}
-    </div> {% endcomment %}
-    <div class="flex-column sidebar">
-      {% for topic in sub_topic %}
-      <div class="dash">
-        <div class="details" onclick="myfun('{{topic.0.topic_name }}')">
-  
-          <p>{{topic.0.topic_name }}</p>
-        </div>
-  
-        {% for sub_topics in topic.1 %}
-        <div class="{{topic.0.topic_name}}  change">
-          <a href="{% url 'lecture' main sub_topics.topic_name %}">
-            <div class="topics-learner ">
-              <img src="/images/play.png" width="40px" height = "40px" alt="missing" />
-              <p>
-                {{sub_topics.topic_name}}
-              </p>
+      {% for sub_topics in topic.1 %}
+      <div class="{{ topic.0.topic_name }} change ">
+        <a href="{% url 'lecture' main sub_topics.topic_name %}">
+          <div class="side-bar-child">
+            <div class="child1 play-icon"></div>
+            <div class="child2">
+              <p>{{ sub_topics.topic_name }}</p>
             </div>
-          </a>
-        </div>
-  
-        {% endfor %}
-  
-  
+          </div>
+        </a>
       </div>
       {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="video-play video">
+    <div class="learn-sidebar-show" onclick="sideBar()">
+      <button>
+        <div class="arrow"></div>
+      </button>
+
+    </div>
+
+    <h1 class="heading-topic">{{ tut.topic_name }}</h1>
+    <div class="iframe-container">{% video tut.tutorial_Video 'small' %}</div>
+
+    <div class="video-change">
+      {% if back %}
+      <div class="back-video videoplay">
+        <a href="{% url 'lecture' main back.topic_name %}" class="tex-dec-none">
+          <p class="fs-5">Back</p>
+        </a>
+      </div>
+      {% endif %}
+      {% if next %}
+      <div class="next-video videoplay">
+        <a href="{% url 'lecture' main next.topic_name %}" class="tex-dec-none">
+          <p class="fs-5">Next</p>
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
 
 
-</div>
 
 
 
-<script>
+
+  <script>
     function myfun(link) {
       var dam = document.getElementsByClassName(link)
       console.log("{{topic.0.topic_name}}")
@@ -81,15 +70,50 @@
       }
       else {
         change = "block"
+
       }
-  
+
       for (var i = 0; i < dam.length; i++) {
         dam[i].style.display = change;
-  
+
+
       }
     }
-  
-  </script>
-  
+    function sideBar(){
+      // var details =document.getElementsByClassName("side-bar")
+      // console.log(details.style.display);
+      // if (details.style.display =="block"){
+      //   details.style.display = "none";
+      // }
+      // else {
+      //   details.style.display=="block";
+      // }
+    
+    var details = document.getElementsByClassName("side-bar")[0];
+    var screen = document.getElementsByTagName("iframe")[0];
+    var fullcreen = document.getElementsByClassName("video")[0];
+    var currentDisplay = details.style.display;
 
-{% endblock %}
+    if (currentDisplay === "block") {
+      details.style.display = "none";
+      screen.style.width = "90vw";
+      screen.style.height = "65vh";
+
+      fullcreen.style.width = "100vw";
+      // screen.stl
+
+
+    } else {
+      details.style.display = "block";
+      screen.style.width = "65vw";
+      screen.style.height = "60vh";
+      fullcreen.style.width = "70vw";
+
+    }
+  }
+    
+
+  </script>
+
+
+  {% endblock %}

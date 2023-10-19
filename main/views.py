@@ -155,7 +155,7 @@ def lecture(request,Topic,SubTopic):
     # else:
     #     return redirect("topic",Topic=Topic)
 
-    
+@login_required(login_url = "/log_in")  
 def topic(request ,Topic):
     course = Category.objects.get(name = Topic)
     if request.method == "POST":
@@ -199,5 +199,5 @@ def courses(request):
     context = {"courses":courses}
     return render(request,"main/courses.html",context)
 
-
+ 
 

@@ -14,40 +14,41 @@
     </div>
 
     <div>
-      <img src="{{course.thumbnail.url}}" alt="{{course.name}}" width="400px" height="210px" />
+      <img
+        src="{{course.thumbnail.url}}"
+        alt="{{course.name}}"
+        width="400px"
+        height="210px"
+      />
     </div>
   </div>
 
   {% if not enroll %}
-  <p style="margin: -3vh 10vw; font-size: 20px;color: rgb(173, 9, 9);">enroll to learn {{course.name}}</p>
+  <p style="margin: -3vh 10vw; font-size: 20px; color: rgb(173, 9, 9)">
+    enroll to learn {{course.name}}
+  </p>
 
   {% endif %}
-
 
   <p class="sub-name">Sub Topics</p>
   <div class="flex-column sub-topics">
     {% for topic in sub_topic %}
     <div class="sub-topic">
       <div class="details" onclick="myfun('{{topic.0.topic_name }}')">
-
         <p>{{topic.0.topic_name }}</p>
       </div>
 
       {% for sub_topics in topic.1 %}
       <div class="{{topic.0.topic_name}}  change">
         <a href="{% url 'lecture' course sub_topics.topic_name %}">
-          <div class="topics ">
+          <div class="topics">
             <img src="/images/play.png" width="40px" alt="missing" />
-            <p>
-              {{sub_topics.topic_name}}
-            </p>
+            <p>{{sub_topics.topic_name}}</p>
           </div>
         </a>
       </div>
 
       {% endfor %}
-
-
     </div>
     {% endfor %}
   </div>
@@ -55,24 +56,22 @@
 
 <script>
   function myfun(link) {
-    var dam = document.getElementsByClassName(link)
-    console.log(dam[1])
-    console.log("{{topic.0.topic_name}}")
-    var change = dam[0].style.display
-    
+    var dam = document.getElementsByClassName(link);
+    console.log(dam[1]);
+    console.log("{{topic.0.topic_name}}");
+    var change = dam[0].style.display;
+
     if (change == "block") {
-      change = "none"
-    }
-    else {
-      change = "block"
+      change = "none";
+    } else {
+      change = "block";
     }
 
     for (var i = 0; i < dam.length; i++) {
       dam[i].style.display = change;
-
+      dam[i].style.backgroundColor = "white";
     }
   }
-
 </script>
 
 {% endblock %}
