@@ -1,4 +1,6 @@
-{% extends 'main.html' %} {% load static %} {% block content %}
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
 <div class="main">
   <div class="topic">
     <div class="flex-column topic-child">
@@ -14,12 +16,7 @@
     </div>
 
     <div>
-      <img
-        src="{{course.thumbnail.url}}"
-        alt="{{course.name}}"
-        width="400px"
-        height="210px"
-      />
+      <img class="topic-img" src="{{course.thumbnail.url}}" alt="{{course.name}}" />
     </div>
   </div>
 
@@ -31,23 +28,24 @@
   {% endif %}
 
   <p class="sub-name">Sub Topics</p>
-  <div class="flex-column sub-topics">
+  <div class="flex-column topic-side-bar">
     {% for topic in sub_topic %}
-    <div class="sub-topic">
-      <div class="details" onclick="myfun('{{topic.0.topic_name }}')">
-        <p>{{topic.0.topic_name }}</p>
+    <div class="dash">
+      <div class="details" onclick="myfun('{{ topic.0.topic_name }}')">
+        <p>{{ topic.0.topic_name }}</p>
       </div>
 
       {% for sub_topics in topic.1 %}
-      <div class="{{topic.0.topic_name}}  change">
+      <div class="{{ topic.0.topic_name }} change ">
         <a href="{% url 'lecture' course sub_topics.topic_name %}">
-          <div class="topics">
-            <img src="/images/play.png" width="40px" alt="missing" />
-            <p>{{sub_topics.topic_name}}</p>
+          <div class="side-bar-child">
+            <div class="child1 play-icon"></div>
+            <div class="child2">
+              <p>{{ sub_topics.topic_name }}</p>
+            </div>
           </div>
         </a>
       </div>
-
       {% endfor %}
     </div>
     {% endfor %}

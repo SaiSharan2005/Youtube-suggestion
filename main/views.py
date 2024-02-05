@@ -7,10 +7,10 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 def home(request):
     if request.user.is_authenticated :
-        name = request.user
+        name = request.user 
         course = UserSelectedCourse.objects.filter(host = name)
         courses = []
-
+  
         for i in course:
             dam=Category.objects.get(name = i.course)
             courses.append(dam)
