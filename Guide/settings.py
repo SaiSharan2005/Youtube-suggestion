@@ -25,11 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-hxb8dt3nal(b2f*!cys%ziz$9vz3fm3zh4d$61dr=hbq-9+it)"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = False
-# ALLOWED_HOSTS = ["ProgrammerHub.pythonanywhere.com"]
+DEBUG = False
+ALLOWED_HOSTS = ["ProgrammerHub.pythonanywhere.com"]
 
-ALLOWED_HOSTS = ["*"]
-DEBUG = True
+# ALLOWED_HOSTS = ["*"]
+# DEBUG = True
 
 
 # Application definition
@@ -185,4 +185,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # CORS_ALLOWED_ORIGINS = [
 #     "http://localhost:3000",  # or your frontend's URL
 # ]
-CORS_ALLOWED_ORIGINS = True 
+CORS_ALLOWED_ORIGINS = True
