@@ -1,5 +1,6 @@
 from rest_framework import generics
 from rest_framework.response import Response
+from rest_framework import permissions
 from .Serializer import CategorySerializer, SubCourseSerializer, SubTopicSerializer, UserSelectedCourseSerializer,UserRegisterSerializer
 from .models import Category, Sub_course, Sub_Topic, UserSelectedCourse
 from django.http import JsonResponse
@@ -8,7 +9,11 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadonly
-
+from django.http import Http404
+from rest_framework.decorators import api_view, permission_classes
+from django.shortcuts import get_object_or_404
+# from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+# from rest_framework_simplejwt.views import TokenObtainPairView
 def WholeCourse(request, pk):
     if pk is None:
         return JsonResponse({"status": "failed", "message": "Please provide the course id"})
@@ -29,22 +34,7 @@ def WholeCourse(request, pk):
     return JsonResponse(data, safe=False)
 
 
-# class CategoryView(generics.RetrieveAPIView):
-#     serializer_class = CategorySerializer
 
-#     def get_queryset(self):
-#         pk = self.kwargs.get('pk')
-#         if pk is None:
-#             # Get all categories
-#             return Category.objects.all()
-#         else:
-#             category = Category.objects.get( id=pk)
-#             return category  # Wrap the single object in a list for iteration
-
-    # def list(self, request, *args, **kwargs):
-    #     queryset = self.get_queryset()
-    #     serializer = self.get_serializer(queryset, many=True)
-    #     return JsonResponse(serializer.data[0], safe=False)
 
 class CategoryView(generics.RetrieveAPIView):
     serializer_class = CategorySerializer
@@ -53,12 +43,19 @@ class CategoryView(generics.RetrieveAPIView):
 
     def get_object(self):
         pk = self.kwargs.get('pk')
-        if pk is None:
-            return Category.objects.all()
+        if pk is not None:
+            return get_object_or_404(Category, id=pk)
         else:
-            
-            return generics.get_object_or_404(Category, id=pk)
+            # You can raise a 404 here if no pk is provided
+            raise Http404("No pk provided for Category")
 
+class AllCategoryView(generics.ListAPIView):
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()
+    # permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return Category.objects.all()
 
 class SubCourse(generics.ListAPIView):
     serializer_class = SubCourseSerializer
@@ -91,7 +88,7 @@ class SubTopic(generics.RetrieveAPIView):
 #     def get(request):
 
 class LogoutUserView(APIView):
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         request.user.auth_token.delete()
         return Response({"Message": "You are logged out"}, status=status.HTTP_200_OK)
 

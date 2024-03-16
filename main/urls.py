@@ -17,7 +17,7 @@ urlpatterns = [
     path('log_in/', views.log_in, name="login"),
     path('log_out/', views.log_out, name="logout"),
 
-    path('Category/', api.CategoryView.as_view()),
+    path('AllCategory/', api.AllCategoryView.as_view()),
     path('Category/<int:pk>', api.CategoryView.as_view()),
     path('SubCourse/', api.SubCourse.as_view()),
     path('SubCourse/<int:pk>', api.SubCourse.as_view()),
@@ -25,8 +25,10 @@ urlpatterns = [
     path('SubTopic/<int:pk>', api.SubTopic.as_view()),
     path("WholeCourse/<int:pk>", api.WholeCourse),
 
+
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
     path("api/login", obtain_auth_token, name="login"),
     path("api/logout_user/", api.LogoutUserView.as_view(), name="logout_user"),
     path("api/register", api.UserRegisterView.as_view(), name="register"),
