@@ -46,8 +46,8 @@ class CategoryView(generics.RetrieveAPIView):
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
     # permission_classes = [IsAuthenticated]
-    permission_classes = (IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,) 
+    # permission_classes = (IsAuthenticated,)
+    # authentication_classes = (TokenAuthentication,) 
 
 
 
