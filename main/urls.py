@@ -24,12 +24,13 @@ urlpatterns = [
     path('SubTopic/', api.SubTopic.as_view()),
     path('SubTopic/<int:pk>', api.SubTopic.as_view()),
     path("WholeCourse/<int:pk>", api.WholeCourse),
+    path("GetUserData/", api.GetUserData.as_view(), name="GetUserData"),
 
 
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
-    path("api/login", obtain_auth_token, name="login"),
+    path("api/login", api.LoginView.as_view(), name="login"),
     path("api/logout_user/", api.LogoutUserView.as_view(), name="logout_user"),
     path("api/register", api.UserRegisterView.as_view(), name="register"),
 
