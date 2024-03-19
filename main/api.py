@@ -11,7 +11,11 @@ from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadonly
 from django.http import Http404
 from rest_framework.decorators import api_view, permission_classes
+from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
+from rest_framework.authtoken.models import Token
+from rest_framework.authentication import TokenAuthentication
+
 # from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 # from rest_framework_simplejwt.views import TokenObtainPairView
 def WholeCourse(request, pk):
@@ -21,7 +25,9 @@ def WholeCourse(request, pk):
     data = []
     course = generics.get_object_or_404(Category, id=pk)
     sub_courses = Sub_course.objects.filter(main=course)
-    permission_classes = [IsAuthenticated]
+    # permission_classes = (IsAuthenticated,) 
+
+    # authentication_classes = (TokenAuthentication,) 
 
     for sub_course in sub_courses:
         temp = {}
@@ -40,6 +46,10 @@ class CategoryView(generics.RetrieveAPIView):
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
     # permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,) 
+
+
 
     def get_object(self):
         pk = self.kwargs.get('pk')
@@ -96,6 +106,8 @@ class UserRegisterView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = UserRegisterSerializer(data=request.data)
         data = {}
+        
+
 
         if serializer.is_valid():
             account = serializer.save()
@@ -103,13 +115,40 @@ class UserRegisterView(APIView):
             data['response'] = 'Account has been created'
             data['username'] = account.username
             data['email'] = account.email
-            
-            refresh = RefreshToken.for_user(account)
-            data['token'] = {
-                'refresh': str(refresh),
-                'access': str(refresh.access_token)
-            }
-        else:
-            data = serializer.errors
+            print("damed   ",account.username,account.password)
+            user = authenticate(username=account.username, password=request.data["password"])
+            if user:
+                token, created = Token.objects.get_or_create(user=user)
+                return Response({'token': token.key})
+            else:
+                return Response({'error': 'Invalid credentials'}, status=401)
 
-        return Response(data)
+class LoginView(APIView):
+    authentication_classes = [TokenAuthentication]
+
+    def post(self, request):
+        # Your authentication logic here
+        user = authenticate(username=request.data['username'], password=request.data['password'])
+        if user:
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({'token': token.key})
+        else:
+            return Response({'error': 'Invalid credentials'}, status=401)
+
+class GetUserData(APIView):
+
+    def get(self, request):
+        try:
+            # token = Token.objects.get(key=request.user.auth_token)
+            user = request.user  # Get the user associated with the token
+
+            # Extract user information
+            user_data = {
+                'username': user.username,
+                # 'email': user.email,
+                'id':user.id
+            }
+            return JsonResponse(user_data)
+        except Token.DoesNotExist:
+            return JsonResponse({'error': 'Token is not valid'}, status=400)
+
