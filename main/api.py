@@ -1,20 +1,20 @@
 from rest_framework import generics
 from rest_framework.response import Response
-from rest_framework import permissions
-from .Serializer import CategorySerializer, SubCourseSerializer, SubTopicSerializer, UserSelectedCourseSerializer,UserRegisterSerializer
-from .models import Category, Sub_course, Sub_Topic, UserSelectedCourse
-from django.http import JsonResponse
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework import status
-from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from .permissions import IsAdminOrReadOnly, IsOwnerOrReadonly
-from django.http import Http404
-from rest_framework.decorators import api_view, permission_classes
-from django.contrib.auth import authenticate
-from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
+from .permissions import IsAdminOrReadOnly, IsOwnerOrReadonly
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework import status
+from rest_framework.views import APIView
+
+from django.http import JsonResponse
+from django.http import Http404
+from django.contrib.auth import authenticate
+from django.shortcuts import get_object_or_404
+
+from .Serializer import CategorySerializer, SubCourseSerializer, SubTopicSerializer, UserSelectedCourseSerializer,UserRegisterSerializer,DocumentationSerializer,DocumentationDataSerializer
+from .models import Category, Sub_course, Sub_Topic, UserSelectedCourse,Documentation,DocumentationData
 
 # from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 # from rest_framework_simplejwt.views import TokenObtainPairView
@@ -152,3 +152,21 @@ class GetUserData(APIView):
         except Token.DoesNotExist:
             return JsonResponse({'error': 'Token is not valid'}, status=400)
 
+
+class DocumentationView(generics.RetrieveAPIView):
+    serializer_class = DocumentationSerializer
+    queryset = Documentation.objects.all()
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        sub_course = Sub_course.objects.get(id=pk)
+        return get_object_or_404(Documentation, subCourse=sub_course)
+
+class DocumentationDataView(generics.ListAPIView):
+    serializer_class = DocumentationDataSerializer
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        document = get_object_or_404(Documentation, id=pk)
+        queryset = DocumentationData.objects.filter(Document=document)
+        return queryset

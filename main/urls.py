@@ -25,7 +25,8 @@ urlpatterns = [
     path('SubTopic/<int:pk>', api.SubTopic.as_view()),
     path("WholeCourse/<int:pk>", api.WholeCourse),
     path("GetUserData/", api.GetUserData.as_view(), name="GetUserData"),
-
+    path("Document/<int:pk>",api.DocumentationView.as_view(), name="Document"),
+    path("DocumentData/<int:pk>",api.DocumentationDataView.as_view(), name="DocumentData"),
 
     # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
