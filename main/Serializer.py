@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category,Sub_course,Sub_Topic,UserSelectedCourse
+from .models import Category,Sub_course,Sub_Topic,UserSelectedCourse,Documentation,DocumentationData
 from django.contrib.auth.models import User
 
 class UserRegisterSerializer(serializers.ModelSerializer):
@@ -56,4 +56,12 @@ class UserSelectedCourseSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
         
-        
+class DocumentationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Documentation
+        fields = "__all__"
+
+class DocumentationDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=DocumentationData
+        fields = "__all__"

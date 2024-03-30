@@ -118,3 +118,24 @@ class UserSelected_Sub(models.Model):
     main = models.ForeignKey(Sub_course, on_delete=models.CASCADE)
     def __str__(self):
             return self.main.topic_name
+
+
+class Documentation(models.Model):
+    host = models.ForeignKey(User, on_delete=models.CASCADE)
+    Category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    SubTopic = models.ForeignKey(Sub_Topic, on_delete=models.CASCADE)
+    subCourse = models.ForeignKey(Sub_course, on_delete=models.CASCADE)
+    DocumentName = models.CharField(max_length=255)
+    def __str__(self):
+        return self.DocumentName
+
+class DocumentationData(models.Model):
+    host = models.ForeignKey(User, on_delete=models.CASCADE)
+    Document = models.ForeignKey(Documentation, on_delete=models.CASCADE)
+    text = models.TextField(blank = True)
+    FORMAT_CHOICES = [("text", "Text"), ("code", "Code"), ("image", "Image")]
+    show_format = models.CharField(max_length=5, choices=FORMAT_CHOICES)
+    image = models.ImageField( blank=True, null=True)  # Added ImageField
+
+    def __str__(self):
+        return self.text
